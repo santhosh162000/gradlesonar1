@@ -14,7 +14,7 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew    
       - name: Build with gradle
-        run: ./gradlew build
+        uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
   sonarqube:
     name: sonarqube
     runs-on: ubuntu-latest
