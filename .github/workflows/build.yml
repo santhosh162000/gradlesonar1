@@ -17,6 +17,7 @@ jobs:
         uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
   sonarqube:
     name: sonarqube
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
