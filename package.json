@@ -22,7 +22,6 @@
         "@semantic-release/github",
         {
           "assets": [
-            "build/static/js/*.js",
             "docs/CHANGELOG.md"
           ]
         }
