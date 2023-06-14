@@ -4,17 +4,32 @@ on:
   workflow_dispatch
 
 jobs:
-  release:
-    permissions:
-      contents: write
-      issues: write
-      pull-requests: write
+  build:
+    name: Create Release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2    
-      - name: Create release
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: "Get latest tag"
+        id: latest_tag
+        run: echo "::set-output name=name::$(git tag --sort=-creatordate | head -1)"
+      - name: "Get second latest tag"
+        id: second_latest_tag
+        run: echo "::set-output name=name::$(git tag --sort=-creatordate | head -2 | tail -1)"
+      - name: "Get changelog"
+        id: changelog
+        run: echo "::set-output name=changelog::$(echo $(git log --pretty=format:'- %s\n' ${{ steps.second_latest_tag.outputs.name }}..${{ steps.latest_tag.outputs.name }}))"
+      - name: Create Release
         id: create_release
-        run: |
-            chmod +x ./release.sh
-            bash ./release.sh
-        shell: bash    
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body: |
+            ${{ steps.changelog.outputs.changelog }}
+          draft: false
+          prerelease: false
