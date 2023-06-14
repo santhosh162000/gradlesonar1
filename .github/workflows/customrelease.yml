@@ -1,0 +1,20 @@
+name: Custom Release
+
+on:
+  workflow_dispatch
+
+jobs:
+  release:
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2    
+      - name: Create release
+        id: create_release
+        run: |
+            chmod +x ./release.sh
+            bash ./release.sh
+        shell: bash    
