@@ -29,7 +29,3 @@ jobs:
         with:
           tag_name: ${{ github.run_number }}
           release_name: ${{ github.run_number }}
-          body: |
-            ${{ steps.changelog.outputs.changelog }}
-          draft: false
-          prerelease: false
