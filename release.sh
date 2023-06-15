@@ -7,7 +7,7 @@ PRE="false"
 BRANCH="main"
 GITHUB_ACCESS_TOKEN="invalid"
 
-# get repon name and owner test
+# get repon name and owner
 REPO_REMOTE=$(git config --get remote.origin.url)
 
 if [ -z $REPO_REMOTE ]; then
