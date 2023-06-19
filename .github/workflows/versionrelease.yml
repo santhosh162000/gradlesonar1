@@ -6,6 +6,8 @@ on:
 jobs:
   version:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
@@ -38,6 +40,5 @@ jobs:
 
       - name: Create new tag
         uses: anothrNick/github-tag-action@1.64.0
-        with:
-          tag: ${{ steps.bump_version.outputs.version }}
-          message: 'New version'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
