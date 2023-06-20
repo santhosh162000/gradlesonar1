@@ -25,3 +25,6 @@ jobs:
 
       - run : echo "Latest commit message is ${{ steps.latest_commit_message.outputs.commit_message }}"  
 
+      - name: Testing some features
+        run: CURRENT_VERSION=${{ steps.javascript1.outputs.tag }}
+
