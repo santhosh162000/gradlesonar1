@@ -29,5 +29,5 @@ jobs:
         run: |
           CURRENT_VERSION=${{ steps.gradlesonar1.outputs.tag }}
           MAJOR=$(echo $CURRENT_VERSION | cut -d '.' -f 1)
-          echo "$MAJOR"
+          MAJOR="$MAJOR"
 
