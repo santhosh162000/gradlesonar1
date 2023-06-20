@@ -45,6 +45,10 @@ jobs:
 
       - name: Verify Version
         run: echo ${{ steps.bump_version.outputs.version }}
+
+      - name: Debug Version
+        run: echo ${{ toJSON(steps.bump_version) }}
+  
     
 
       - name: Create Release
