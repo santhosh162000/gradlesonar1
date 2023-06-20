@@ -26,5 +26,7 @@ jobs:
       - run : echo "Latest commit message is ${{ steps.latest_commit_message.outputs.commit_message }}"  
 
       - name: Testing some features
-        run: CURRENT_VERSION=${{ steps.gradlesonar1.outputs.tag }}
+        run: |
+          CURRENT_VERSION=${{ steps.gradlesonar1.outputs.tag }}
+          MAJOR=$(echo $CURRENT_VERSION | cut -d '.' -f 1)
 
