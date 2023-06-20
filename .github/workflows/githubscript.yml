@@ -19,7 +19,7 @@ jobs:
       - name: Determine Version
         id: determine_version
         run: |
-          VERSION=$(git describe --tags --abbrev=0 2>/dev/null)
+          VERSION=$(git for-each-ref --sort=-taggerdate --format '%(refname:short)' refs/tags | head -n 1)
           if [ -z "$VERSION" ]; then
             VERSION="1.0.0"
           else
@@ -31,6 +31,7 @@ jobs:
           echo "::set-output name=major::$MAJOR"
           echo "::set-output name=minor::$MINOR"
           echo "::set-output name=patch::$PATCH"
+
 
 
       - name: Bump Version
