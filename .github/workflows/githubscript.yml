@@ -38,7 +38,7 @@ jobs:
         run: |
           COMMIT_MESSAGE=${{ steps.latest_commit_message.outputs.commit_message }}
 
-          if [[ $COMMIT_MESSAGE == *major ]]; then
+          if [[ $COMMIT_MESSAGE == testing ]]; then
             MAJOR=$((MAJOR + 1))
             MINOR=0
             PATCH=0
