@@ -1,60 +1,58 @@
-name: Release using custom script
+name: Release using custom scripts
 
 on:
   workflow_dispatch
 
 jobs:
-  release:
+  determine_version:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      packages: write
-
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Set up Git
-        run: |
-          git config --global user.name "Your Name"
-          git config --global user.email "test@gmail.com"
 
       - name: Determine Version
         id: determine_version
         run: |
-          VERSION=$(git for-each-ref --sort=-taggerdate --format '%(refname:short)' refs/tags | head -n 1)
-          if [ -z "$VERSION" ]; then
+          COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.sha }})
+          CURRENT_VERSION=$(git describe --tags --abbrev=0 2>/dev/null)
+
+          if [[ -n $CURRENT_VERSION ]]; then
+            VERSION=${CURRENT_VERSION#"v"}
+          else
             VERSION="1.0.0"
-          else
-            VERSION=${VERSION#"v"}
           fi
-          MAJOR=$(echo $VERSION | cut -d '.' -f 1)
-          MINOR=$(echo $VERSION | cut -d '.' -f 2)
-          PATCH=$(echo $VERSION | cut -d '.' -f 3)
-          echo "::set-output name=major::$MAJOR"
-          echo "::set-output name=minor::$MINOR"
-          echo "::set-output name=patch::$PATCH"
 
-
-
-      - name: Bump Version
-        id: bump_version
-        run: |
-          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            NEW_MINOR=$(( ${{ steps.determine_version.outputs.minor }} + 1 ))
-            NEW_VERSION="${{ steps.determine_version.outputs.major }}.${NEW_MINOR}.0"
+          if [[ $COMMIT_MESSAGE == *"[major]"* ]]; then
+            MAJOR=$((${{ steps.determine_version.outputs.major }} + 1))
+            MINOR=0
+            PATCH=0
+          elif [[ $COMMIT_MESSAGE == *"[minor]"* ]]; then
+            MAJOR=${{ steps.determine_version.outputs.major }}
+            MINOR=$((${{ steps.determine_version.outputs.minor }} + 1))
+            PATCH=0
           else
-            NEW_VERSION="${{ steps.determine_version.outputs.major }}.${{ steps.determine_version.outputs.minor }}.${{ steps.determine_version.outputs.patch }}"
+            MAJOR=${{ steps.determine_version.outputs.major }}
+            MINOR=${{ steps.determine_version.outputs.minor }}
+            PATCH=$((${{ steps.determine_version.outputs.patch }} + 1))
           fi
+
+          NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
           echo "::set-output name=new_version::$NEW_VERSION"
 
+  create_release:
+    needs: determine_version
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
       - name: Create Release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         with:
-          tag_name: v${{ steps.bump_version.outputs.new_version }}
-          release_name: Release v${{ steps.bump_version.outputs.new_version }}
+          tag_name: v${{ needs.determine_version.outputs.new_version }}
+          release_name: Release v${{ needs.determine_version.outputs.new_version }}
           body: |
             Add release notes or description here
           draft: false
