@@ -36,7 +36,7 @@ jobs:
       - name: Bump Version
         id: determine_version
         run: |
-          COMMIT_MESSAGE=${{ steps.latest_commit_message.outputs.commit_message }}
+          COMMIT_MESSAGE="${{ steps.latest_commit_message.outputs.commit_message }}"
 
           if [[ $COMMIT_MESSAGE == testing ]]; then
             MAJOR=$((MAJOR + 1))
