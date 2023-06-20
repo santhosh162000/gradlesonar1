@@ -7,6 +7,9 @@ jobs:
   determine_version:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - uses: oprypin/find-latest-tag@v1
         with:
           repository: santhosh162000/gradlesonar1  # The repository to scan.
@@ -17,7 +20,10 @@ jobs:
 
       - name: Get Latest Commit Message
         id: latest_commit_message
-        run: echo "::set-output name=commit_message::$(git log --format=%B -n 1)"
+        run: |
+          git fetch --unshallow
+          echo "::set-output name=commit_message::$(git log --format=%B -n 1)"
+
 
       - run : echo "Latest commit message is ${{ steps.latest_commit_message.outputs.commit_message }}"  
 
