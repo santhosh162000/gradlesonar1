@@ -28,6 +28,6 @@ jobs:
       - name: Testing some features
         run: |
           CURRENT_VERSION=${{ steps.gradlesonar1.outputs.tag }}
-          MAJOR=$(echo $CURRENT_VERSION | awk -F. '{print $1}')
+          MAJOR=$(echo $CURRENT_VERSION | cut -d '.' -f 1)
           echo "$MAJOR"
 
