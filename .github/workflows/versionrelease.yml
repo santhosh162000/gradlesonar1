@@ -31,11 +31,11 @@ jobs:
           export patch=$(echo "${{ steps.get_version.outputs.version }}" | cut -d '.' -f 3)
 
           if [ -n "$(echo ${{ github.event.pull_request.labels }} | grep -qF 'major')" ]; then
-            echo "::set-output name=version::${major}.0.0"
+            echo "::set-output name=version::v.${major}.0.0"
           elif [ -n "$(echo ${{ github.event.pull_request.labels }} | grep -qF 'minor')" ]; then
-            echo "::set-output name=version::${major}.${minor+1}.0"
+            echo "::set-output name=version::v.${major}.${minor+1}.0"
           else
-            echo "::set-output name=version::${major}.${minor}.${patch+1}"
+            echo "::set-output name=version::v.${major}.${minor}.${patch+1}"
           fi
 
       - name: Create new tag
