@@ -21,9 +21,7 @@ jobs:
       - name: Get Latest Commit Message
         id: latest_commit_message
         run: |
-          git fetch --unshallow
           echo "::set-output name=commit_message::$(git log --format=%B -n 1)"
-
 
       - run : echo "Latest commit message is ${{ steps.latest_commit_message.outputs.commit_message }}"  
 
