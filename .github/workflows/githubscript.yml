@@ -6,6 +6,8 @@ on:
 jobs:
   creating-github-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
