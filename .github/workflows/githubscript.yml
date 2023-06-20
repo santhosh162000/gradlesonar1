@@ -19,14 +19,19 @@ jobs:
       - name: Determine Version
         id: determine_version
         run: |
-          VERSION=$(git describe --tags --abbrev=0)
-          VERSION=${VERSION#"v"}
+          VERSION=$(git describe --tags --abbrev=0 2>/dev/null)
+          if [ -z "$VERSION" ]; then
+            VERSION="1.0.0"
+          else
+            VERSION=${VERSION#"v"}
+          fi
           MAJOR=$(echo $VERSION | cut -d '.' -f 1)
           MINOR=$(echo $VERSION | cut -d '.' -f 2)
           PATCH=$(echo $VERSION | cut -d '.' -f 3)
           echo "::set-output name=major::$MAJOR"
           echo "::set-output name=minor::$MINOR"
           echo "::set-output name=patch::$PATCH"
+
 
       - name: Bump Version
         id: bump_version
