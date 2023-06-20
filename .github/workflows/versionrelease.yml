@@ -26,9 +26,9 @@ jobs:
       - name: Determine version type
         id: bump_version
         run: |
-          export major=$(echo ${{ steps.get_version.outputs.version }} | cut -d '.' -f 1)
-          export minor=$(echo ${{ steps.get_version.outputs.version }} | cut -d '.' -f 2)
-          export patch=$(echo ${{ steps.get_version.outputs.version }} | cut -d '.' -f 3)
+          export major=$(echo "${{ steps.get_version.outputs.version }}" | cut -d '.' -f 1)
+          export minor=$(echo "${{ steps.get_version.outputs.version }}" | cut -d '.' -f 2)
+          export patch=$(echo "${{ steps.get_version.outputs.version }}" | cut -d '.' -f 3)
 
           if [ -n "$(echo ${{ github.event.pull_request.labels }} | grep -w 'major')" ]; then
             echo "::set-output name=version::${major}.0.0"
