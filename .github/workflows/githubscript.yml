@@ -1,0 +1,25 @@
+name: Github release based on actions github script
+
+on:
+  workflow_dispatch
+
+jobs:
+  creating-github-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Create Release
+        uses: actions/github-script@v4.0.2
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+              await github.request(`POST /repos/${{ github.repository }}/releases` , {
+                tag_name: "${{ github.ref }}",
+                generate_release_notes: true
+              });
+
+
+      
