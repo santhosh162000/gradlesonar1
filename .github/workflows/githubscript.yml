@@ -1,27 +1,52 @@
-name: Github release based on actions github script
+name: Release 
 
 on:
   workflow_dispatch
 
 jobs:
-  creating-github-release:
+  release:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: Set up Git
+        run: |
+          git config --global user.name "Your Name"
+          git config --global user.email "test@gmail.com"
+
+      - name: Determine Version
+        id: determine_version
+        run: |
+          VERSION=$(git describe --tags --abbrev=0)
+          VERSION=${VERSION#"v"}
+          MAJOR=$(echo $VERSION | cut -d '.' -f 1)
+          MINOR=$(echo $VERSION | cut -d '.' -f 2)
+          PATCH=$(echo $VERSION | cut -d '.' -f 3)
+          echo "::set-output name=major::$MAJOR"
+          echo "::set-output name=minor::$MINOR"
+          echo "::set-output name=patch::$PATCH"
+
+      - name: Bump Version
+        id: bump_version
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            NEW_MINOR=$(( ${{ steps.determine_version.outputs.minor }} + 1 ))
+            NEW_VERSION="${{ steps.determine_version.outputs.major }}.${NEW_MINOR}.0"
+          else
+            NEW_VERSION="${{ steps.determine_version.outputs.major }}.${{ steps.determine_version.outputs.minor }}.${{ steps.determine_version.outputs.patch }}"
+          fi
+          echo "::set-output name=new_version::$NEW_VERSION"
+
       - name: Create Release
-        uses: actions/github-script@v4.0.2
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-              await github.request(`POST /repos/${{ github.repository }}/releases` , {
-                tag_name: "${{ github.ref }}",
-                generate_release_notes: true
-              });
-
-
-      
+          tag_name: v${{ steps.bump_version.outputs.new_version }}
+          release_name: Release v${{ steps.bump_version.outputs.new_version }}
+          body: |
+            Add release notes or description here
+          draft: false
+          prerelease: false
