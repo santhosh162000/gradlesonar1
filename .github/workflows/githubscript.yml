@@ -9,9 +9,9 @@ jobs:
     steps:
       - uses: oprypin/find-latest-tag@v1
         with:
-          repository: octokit/rest.js  # The repository to scan.
+          repository: santhosh162000/gradlesonar1  # The repository to scan.
           releases-only: true  # We know that all relevant tags have a GitHub release for them.
-        id: octokit  # The step ID to refer to later.
+        id: gradlesonar1  # The step ID to refer to later.
 
-      - run: echo "Octokit is at version ${{ steps.octokit.outputs.tag }}"
+      - run: echo "gradlesonar1 is at version ${{ steps.gradlesonar1.outputs.tag }}"
 
