@@ -30,9 +30,9 @@ jobs:
           export minor=$(echo "${{ steps.get_version.outputs.version }}" | cut -d '.' -f 2)
           export patch=$(echo "${{ steps.get_version.outputs.version }}" | cut -d '.' -f 3)
 
-          if [ -n "$(echo ${{ github.event.pull_request.labels }} | grep -w 'major')" ]; then
+          if [ -n "$(echo ${{ github.event.pull_request.labels }} | grep -qF 'major')" ]; then
             echo "::set-output name=version::${major}.0.0"
-          elif [ -n "$(echo ${{ github.event.pull_request.labels }} | grep -w 'minor')" ]; then
+          elif [ -n "$(echo ${{ github.event.pull_request.labels }} | grep -qF 'minor')" ]; then
             echo "::set-output name=version::${major}.${minor+1}.0"
           else
             echo "::set-output name=version::${major}.${minor}.${patch+1}"
