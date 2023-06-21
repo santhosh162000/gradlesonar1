@@ -1,4 +1,4 @@
-name: Release using custom scripts (Version Bump)
+name: Release using custom script (Version Bump)
 
 on:
   workflow_dispatch
