@@ -78,8 +78,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ needs.determine_version.outputs.output1 }}
-          release_name: Release ${{ needs.determine_version.outputs.output1 }}
+          tag_name: v${{ needs.determine_version.outputs.output1 }}
+          release_name: Release v${{ needs.determine_version.outputs.output1 }}
           body: |
             Add release notes or description here
           draft: false
