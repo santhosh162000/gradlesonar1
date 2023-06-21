@@ -50,7 +50,7 @@ jobs:
             MINOR=$MINOR
             PATCH=$PATCH
           elif [[ $COMMIT_MESSAGE == "fix: commit test IT-2" ]]; then
-            MAJOR=$((MAJOR))
+            MAJOR=$(($MAJOR))
             MINOR=$(($MINOR + 1))
             PATCH=$PATCH
           else
