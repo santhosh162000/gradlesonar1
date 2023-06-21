@@ -41,7 +41,7 @@ jobs:
         run: |
           COMMIT_MESSAGE="${{ steps.latest_commit_message.outputs.commit_message }}"
           CURRENT_VERSION=${{ steps.javascript1.outputs.tag }}
-          MAJOR=$(echo $CURRENT_VERSION | awk -F. '{print $1}')
+          MAJOR=$(echo $CURRENT_VERSION | awk -F. '{print $1}' | tr -dc '0-9')
           MINOR=$(echo $CURRENT_VERSION | awk -F. '{print $2}')
           PATCH=$(echo $CURRENT_VERSION | awk -F. '{print $3}')
 
