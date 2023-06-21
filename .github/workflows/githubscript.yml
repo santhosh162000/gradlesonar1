@@ -45,11 +45,11 @@ jobs:
           MINOR=$(echo $CURRENT_VERSION | awk -F. '{print $2}')
           PATCH=$(echo $CURRENT_VERSION | awk -F. '{print $3}')
 
-          if [[ $COMMIT_MESSAGE == "fix: commit test IT-1" ]]; then
+          if [[ $COMMIT_MESSAGE == "chore: commit test IT-1" ]]; then
             MAJOR=$(($MAJOR + 1))
             MINOR=$MINOR
             PATCH=$PATCH
-          elif [[ $COMMIT_MESSAGE == "fix: commit test IT-2" ]]; then
+          elif [[ $COMMIT_MESSAGE == "feat: commit test IT-2" ]]; then
             MAJOR=$(($MAJOR))
             MINOR=$(($MINOR + 1))
             PATCH=$PATCH
