@@ -47,12 +47,12 @@ jobs:
 
           if [[ $COMMIT_MESSAGE == "build"* || $COMMIT_MESSAGE == "test"* ]]; then
             MAJOR=$(($MAJOR + 1))
-            MINOR=$MINOR
-            PATCH=$PATCH
+            MINOR=0
+            PATCH=0
           elif [[ $COMMIT_MESSAGE == "fix"* ]]; then
             MAJOR=$(($MAJOR))
             MINOR=$(($MINOR + 1))
-            PATCH=$PATCH
+            PATCH=0
           else
             MAJOR=$MAJOR
             MINOR=$MINOR
